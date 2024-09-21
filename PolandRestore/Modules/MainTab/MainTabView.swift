@@ -8,14 +8,14 @@
 import SwiftUI
 
 struct MainTabView: View {
-    // MARK: - Public Properties
+    // MARK: - Private Properties
 
     @StateObject private var viewModel = MainTabViewModel()
 
-    @State private var showToast = false
     @State private var completedAchievement: AchievementType?
+    @State private var showToast = false
 
-    // MARK: - View Properties
+    // MARK: - Body
 
     var body: some View {
         NavigationStack {
@@ -71,6 +71,8 @@ struct MainTabView: View {
 }
 
 extension MainTabView {
+    // MARK: - Public Methods
+
     func CustomTabItem(imageName: String, title: String, isActive: Bool) -> some View {
         VStack {
             Image(imageName)

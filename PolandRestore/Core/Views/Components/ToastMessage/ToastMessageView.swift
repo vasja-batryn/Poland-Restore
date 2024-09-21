@@ -29,7 +29,7 @@ struct ToastMessageView: View {
                     SliderView(progress: .constant(1))
                         .frame(width: 200, height: 21)
 
-                    Text("Complate!")
+                    Text("Complete!")
                         .font(.system(size: 10, weight: .semibold))
                         .foregroundStyle(Color.primaryText)
                 }
@@ -42,29 +42,10 @@ struct ToastMessageView: View {
                     .frame(width: 100, height: 60)
                     .padding(.horizontal)
             }
-            .padding(.horizontal)
-            .padding(.bottom, 10)
+            .padding([.horizontal, .bottom], 15)
+            .padding(.top, -20)
         }
-        .background {
-            RoundedRectangle(cornerRadius: 12)
-                .foregroundStyle(Color.primaryForeground)
-
-            VStack {
-                Image("fire")
-                    .resizable()
-                    .scaledToFit()
-                    .opacity(0.9)
-                Image("fire")
-                    .resizable()
-                    .scaledToFit()
-                    .opacity(0.8)
-                Image("fire")
-                    .resizable()
-                    .scaledToFit()
-                    .opacity(0.7)
-            }
-            .padding(6)
-        }
+        .background(backgroundView)
         .padding()
         .transition(
             .asymmetric(
@@ -73,6 +54,26 @@ struct ToastMessageView: View {
             )
             .combined(with: .opacity)
         )
+    }
+
+    // MARK: - Private Subviews
+
+    private var backgroundView: some View {
+        RoundedRectangle(cornerRadius: 12)
+            .foregroundStyle(Color.primaryForeground)
+            .overlay(fireImagesStack, alignment: .center)
+    }
+
+    private var fireImagesStack: some View {
+        VStack(spacing: 9) {
+            ForEach(0 ..< 3) { index in
+                Image("fire")
+                    .resizable()
+                    .scaledToFit()
+                    .opacity(0.7 - Double(index) / 10)
+            }
+        }
+        .padding(6)
     }
 }
 

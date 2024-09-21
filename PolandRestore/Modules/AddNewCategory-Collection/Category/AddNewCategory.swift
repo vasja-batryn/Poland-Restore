@@ -9,38 +9,61 @@ import PhotosUI
 import SwiftUI
 
 struct AddNewCategory: View {
-    @StateObject private var viewModel = AddCategoryViewModel()
+    // MARK: - Public Propertis
+
     @Environment(\.dismiss) var dismiss
-    
-    @State var isfirstOpen: Bool
-    @State var isCollection: Bool = false
+    @State var isFirstOpen: Bool
+
+    // MARK: - Private Properties
+
+    @StateObject private var viewModel = AddCategoryViewModel()
+
+    // MARK: - Body
 
     var body: some View {
-        VStack(alignment: .center, spacing: 20) {
-            Text("Add a new category")
-                .font(.system(size: 24, weight: .semibold))
-                .frame(maxWidth: .infinity, alignment: .leading)
-            if isCollection {
-                VStack(alignment: .leading, spacing: 20) {
-                    Text("\(viewModel.categoryName)/\(viewModel.selectedCategoryType)")
-                        .font(.system(size: 18, weight: .semibold))
-                        .foregroundStyle(.primaryForeground)
-                        .frame(maxWidth: .infinity, alignment: .leading)
-                    
-                    Button(action: { dismiss() }) {
-                        HStack {
-                            Image(systemName: "chevron.left")
-                                .font(.system(size: 12, weight: .medium))
-                                .foregroundStyle(.primaryForeground)
-                            
-                            Text("Back")
-                                .font(.system(size: 16, weight: .medium))
-                                .foregroundStyle(.primaryForeground)
-                        }
-                    }
-                }
+        ScrollView {
+            VStack(alignment: .center, spacing: 38) {
+                headerView
+                imageSection
+                formFields
+                createButton
             }
-            
+            .padding(.horizontal)
+            .photosPicker(
+                isPresented: $viewModel.isPhotoLibraryPresented,
+                selection: $viewModel.photosPickerItem
+            )
+            .navigationDestination(isPresented: $viewModel.isFinishPresented) {
+                FinishCreateCategory()
+                    .navigationBarBackButtonHidden(true)
+            }
+        }
+    }
+
+    // MARK: - Private Properties
+
+    private var headerView: some View {
+        Text("Add a new category")
+            .font(.system(size: 24, weight: .semibold))
+            .frame(maxWidth: .infinity, alignment: .leading)
+    }
+
+    private var backButton: some View {
+        Button(action: { dismiss() }) {
+            HStack {
+                Image(systemName: "chevron.left")
+                    .font(.system(size: 12, weight: .medium))
+                    .foregroundStyle(.primaryForeground)
+
+                Text("Back")
+                    .font(.system(size: 16, weight: .medium))
+                    .foregroundStyle(.primaryForeground)
+            }
+        }
+    }
+
+    private var imageSection: some View {
+        VStack(alignment: .center, spacing: 38) {
             Text("Add an image")
                 .font(.system(size: 18, weight: .semibold))
                 .foregroundStyle(.primaryForeground)
@@ -49,63 +72,68 @@ struct AddNewCategory: View {
             RoundedRectangle(cornerRadius: 24)
                 .stroke(.primaryForeground, lineWidth: 2)
                 .frame(width: 180, height: 200)
-                .overlay(alignment: .center) {
-                    Button(action: { viewModel.isPhotoLibraryPresented.toggle() }) {
-                        Image("importImage")
-                    }
-                }
-                .background {
+                .background(
                     RoundedRectangle(cornerRadius: 24)
-                        .foregroundStyle(viewModel.selectedImage != nil ? .clear : .tertiaryForeground.opacity(0.5))
-                        .background {
-                            if let image = viewModel.selectedImage {
-                                Image(uiImage: image)
-                                    .resizable()
-                                    .clipShape(RoundedRectangle(cornerRadius: 24))
-                            }
-                        }
-                }
-                .padding(.vertical)
-                
-            ScrollView {
-                AppTextField(
-                    text: $viewModel.categoryName,
-                    title: "Category name",
-                    placeholder: "Name"
-                )
-                
-                CategoryDropdown(selectedCategoryType: $viewModel.selectedCategoryType)
+                        .foregroundStyle(.primaryForeground.opacity(0.2)))
+                .overlay(imageOverlay)
+        }
+    }
+
+    private var imageOverlay: some View {
+        Button(action: { viewModel.isPhotoLibraryPresented.toggle() }) {
+            if let image = viewModel.selectedImage {
+                Image(uiImage: image)
+                    .resizable()
+                    .aspectRatio(contentMode: .fill)
+                    .frame(width: 180, height: 200)
+                    .clipShape(RoundedRectangle(cornerRadius: 24))
+                    .clipped()
+                    .overlay(Image("importImage"))
+            } else {
+                Image("importImage")
             }
-            
-            PrimaryButton(
-                title: "Create",
-                action: {
-                    viewModel.saveCollection()
-                    
-                    if isfirstOpen == true {
-                        viewModel.isFinishPresented.toggle()
-                        isfirstOpen = false
-                    } else {
-                        dismiss()
-                    }
-                }
-            )
-            .disabled(
-                viewModel.categoryName.isEmpty || viewModel.selectedCategoryType == nil || viewModel.selectedImage == nil
-            )
         }
-        .padding(.horizontal)
-        .photosPicker(
-            isPresented: $viewModel.isPhotoLibraryPresented,
-            selection: $viewModel.photosPickerItem
+        .background(
+            RoundedRectangle(cornerRadius: 24)
+                .foregroundStyle(viewModel.selectedImage != nil ? .clear : .tertiaryForeground)
         )
-        .navigationDestination(isPresented: $viewModel.isFinishPresented) {
-            FinishCreateCategory()
-                .navigationBarBackButtonHidden(true)
+    }
+
+    private var formFields: some View {
+        ScrollView {
+            AppTextField(
+                text: $viewModel.categoryName,
+                title: "Category name",
+                placeholder: "Name"
+            )
+
+            CategoryDropdown(selectedCategoryType: $viewModel.selectedCategoryType)
         }
+    }
+
+    private var createButton: some View {
+        PrimaryButton(
+            title: "Create",
+            action: handleCreateAction
+        )
+        .disabled(isCreateButtonDisabled)
+    }
+
+    private func handleCreateAction() {
+        viewModel.saveCollection()
+        if isFirstOpen {
+            viewModel.isFinishPresented.toggle()
+            isFirstOpen = false
+        } else {
+            dismiss()
+        }
+    }
+
+    private var isCreateButtonDisabled: Bool {
+        viewModel.categoryName.isEmpty || viewModel.selectedCategoryType == nil || viewModel.selectedImage == nil
     }
 }
 
 #Preview {
-    AddNewCategory(isfirstOpen: true)
+    AddNewCategory(isFirstOpen: true)
 }

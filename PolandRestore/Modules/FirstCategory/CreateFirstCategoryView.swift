@@ -8,8 +8,12 @@
 import SwiftUI
 
 struct CreateFirstCategoryView: View {
+    // MARK: - Private Properties
+
     @State private var showAddNewCategoryPage: Bool = false
     
+    // MARK: - Body
+
     var body: some View {
         NavigationStack {
             VStack(alignment: .leading) {
@@ -22,7 +26,7 @@ struct CreateFirstCategoryView: View {
                 
                 Spacer()
                 
-                VStack(alignment: .center) {
+                VStack(alignment: .center, spacing: 10) {
                     Text("Empty")
                         .font(.system(size: 24, weight: .semibold))
                         .foregroundStyle(.primaryForeground.opacity(0.5))
@@ -40,7 +44,7 @@ struct CreateFirstCategoryView: View {
             }
             .padding(.horizontal)
             .navigationDestination(isPresented: $showAddNewCategoryPage) {
-                AddNewCategory(isfirstOpen: true)
+                AddNewCategory(isFirstOpen: true)
                     .navigationBarBackButtonHidden(true)
             }
         }

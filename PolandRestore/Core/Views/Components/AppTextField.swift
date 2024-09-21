@@ -14,17 +14,14 @@ struct AppTextField: View {
     let title: String
     let placeholder: String
 
+    // MARK: - Body
+
     var body: some View {
         VStack(alignment: .leading, spacing: 8) {
-            HStack(spacing: 12) {
-                Text(title)
-                    .font(.system(size: 18, weight: .regular))
-                    .foregroundStyle(Color.secondaryForeground.opacity(0.25))
-            }
-            .padding(.leading, 5)
+            titleView
+                .padding(.leading, 5)
 
             TextField("", text: $text, axis: .horizontal)
-
                 .placeholder(when: text.isEmpty) {
                     Text(placeholder)
                         .foregroundStyle(Color.secondaryForeground.opacity(0.5))
@@ -39,6 +36,16 @@ struct AppTextField: View {
                 .font(.system(size: 18, weight: .semibold))
         }
         .padding()
+    }
+
+    // MARK: - Private Subviews
+
+    private var titleView: some View {
+        HStack(spacing: 12) {
+            Text(title)
+                .font(.system(size: 18, weight: .regular))
+                .foregroundStyle(Color.secondaryForeground.opacity(0.25))
+        }
     }
 }
 

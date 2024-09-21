@@ -8,9 +8,13 @@
 import SwiftUI
 
 struct DeleteMessageView: View {
+    // MARK: - Public Propertis
+
     @Binding var isPresented: Bool
     let onTapYes: () -> Void
     
+    // MARK: - Body
+
     var body: some View {
         VStack {
             Button(action: { isPresented.toggle() }) {

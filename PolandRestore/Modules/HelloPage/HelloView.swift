@@ -8,9 +8,16 @@
 import SwiftUI
 
 struct HelloView: View {
+    // MARK: - Public Propertis
+
     var name: String
+    
+    // MARK: - Private Properties
+
     @State private var showCreateFirstCategoryPage: Bool = false
     
+    // MARK: - Body
+
     var body: some View {
         NavigationStack {
             VStack(alignment: .leading) {
@@ -19,7 +26,7 @@ struct HelloView: View {
                 
                 Spacer()
                 
-                VStack(alignment: .center) {
+                VStack(alignment: .center, spacing: 20) {
                     Text("Nice to meet you!")
                         .font(.system(size: 24, weight: .semibold))
                         .foregroundStyle(.primaryForeground)

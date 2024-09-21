@@ -8,6 +8,8 @@
 import SwiftUI
 
 struct User: Codable {
+    // MARK: - Public Propertis
+
     var name: String
     var collectionCount: Int
     var avatar: Data?

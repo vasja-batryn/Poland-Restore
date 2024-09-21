@@ -25,7 +25,7 @@ struct OtherPicker: View {
                     .frame(maxWidth: .infinity)
                     .background {
                         RoundedRectangle(cornerRadius: 12)
-                            .fill(selectedTab == tab ? Color.primaryForeground : Color.primary.opacity(0.1))
+                            .fill(selectedTab == tab ? Color.primaryForeground : .tertiaryForeground.opacity(0.5))
                     }
                     .onTapGesture {
                         selectedTab = tab

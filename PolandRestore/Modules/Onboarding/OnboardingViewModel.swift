@@ -5,15 +5,15 @@
 //  Created by Vasja Batryn on 16.09.2024.
 //
 
-import Foundation
 import UIKit
 
 @MainActor
 final class OnboardingViewModel: ObservableObject {
     // MARK: - Public Properties
 
-    let pages = OnboardingPage.allCases
     @Published var showNamePage = false
+    @Published var currentPageIndex = 0
+    let pages = OnboardingPage.allCases
 
     var numberOfPages: Int {
         pages.count
@@ -27,7 +27,7 @@ final class OnboardingViewModel: ObservableObject {
         currentPageIndex == numberOfPages - 1
     }
 
-    @Published var currentPageIndex = 0
+    // MARK: - Public Methods
 
     func didTapNextButton() {
         guard currentPageIndex + 1 < numberOfPages else {

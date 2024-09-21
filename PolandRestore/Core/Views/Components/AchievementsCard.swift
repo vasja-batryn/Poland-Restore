@@ -8,68 +8,86 @@
 import SwiftUI
 
 struct AchievementsCard: View {
-    let achievements: AchievementType
-
     // MARK: - Public Properties
 
+    let achievements: AchievementType
     @Binding var progress: CGFloat
     var collectionCount: Int
 
+    // MARK: - Private Properties
+
+    private let imageNames = ["fire", "fire", "fire"]
+
+    // MARK: - Body
+
     var body: some View {
         VStack {
-            Text(achievements.rawValue)
-                .font(.system(size: 18, weight: .semibold))
-                .foregroundStyle(progress == 1 ? Color.primaryText : .primaryForeground)
-                .frame(maxWidth: .infinity, alignment: .leading)
-                .padding([.top, .leading])
-
-            SliderView(progress: .constant(progress))
+            header
+            SliderView(progress: $progress)
                 .frame(width: 200, height: 21)
-                .padding([.bottom, .trailing])
                 .frame(maxWidth: .infinity, alignment: .trailing)
+                .padding([.bottom, .trailing])
         }
-        .background {
-            RoundedRectangle(cornerRadius: 12)
-                .foregroundStyle(progress == 1 ? Color.primaryForeground : .tertiaryForeground)
+        .background(backgroundView)
+        .cornerRadius(12)
+        .padding(.vertical)
+        .onAppear(perform: updateProgress)
+    }
 
-            VStack {
-                Image("fire")
-                    .resizable()
-                    .scaledToFit()
-                    .opacity(progress == 1 ? 0.9 : 0.5)
-                Image("fire")
-                    .resizable()
-                    .scaledToFit()
-                    .opacity(progress == 1 ? 0.8 : 0.4)
-                Image("fire")
-                    .resizable()
-                    .scaledToFit()
-                    .opacity(progress == 1 ? 0.7 : 0.2)
+    // MARK: - Private Properties
+
+    private var header: some View {
+        Text(achievements.rawValue)
+            .font(.system(size: 18, weight: .semibold))
+            .foregroundColor(progress == 1 ? Color.primaryText : .primaryForeground)
+            .frame(maxWidth: .infinity, alignment: .leading)
+            .padding([.top, .leading])
+    }
+
+    private var backgroundView: some View {
+        ZStack {
+            RoundedRectangle(cornerRadius: 12)
+                .foregroundColor(progress == 1 ? Color.primaryForeground : .tertiaryForeground.opacity(0.5))
+
+            VStack(spacing: 6) {
+                ForEach(imageNames.indices, id: \.self) { index in
+                    Image(imageNames[index])
+                        .resizable()
+                        .scaledToFit()
+                        .opacity(fireOpacity(for: index))
+                }
             }
             .padding(6)
         }
-        .padding()
-        .onAppear {
-            updateProgress()
-        }
+    }
+
+    // MARK: - Private Methods
+
+    private func fireOpacity(for index: Int) -> Double {
+        let baseOpacity = [1, 0.8, 0.7]
+        return progress == 1 ? baseOpacity[index] : baseOpacity[index] - 0.6
     }
 
     private func updateProgress() {
+        let achievementTarget: CGFloat
         switch achievements {
         case .createFirst:
-            progress = collectionCount >= 1 ? 1 : CGFloat(collectionCount) / 1
+            achievementTarget = 1
         case .createThree:
-            progress = collectionCount >= 3 ? 1 : CGFloat(collectionCount) / 3
+            achievementTarget = 3
         case .createFive:
-            progress = collectionCount >= 5 ? 1 : CGFloat(collectionCount) / 5
+            achievementTarget = 5
         case .createNine:
-            progress = collectionCount >= 9 ? 1 : CGFloat(collectionCount) / 9
+            achievementTarget = 9
         }
+        progress = collectionCount >= Int(achievementTarget) ? 1 : CGFloat(collectionCount) / achievementTarget
     }
 }
 
 #Preview {
     AchievementsCard(achievements: .createFirst, progress: .constant(0.33), collectionCount: 1)
+
+    AchievementsCard(achievements: .createFirst, progress: .constant(1), collectionCount: 1)
 
     AchievementsCard(achievements: .createFive, progress: .constant(1), collectionCount: 3)
 }

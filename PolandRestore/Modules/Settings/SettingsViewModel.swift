@@ -1,5 +1,5 @@
 //
-//  SettingsViewModels.swift
+//  SettingsViewModel.swift
 //  PolandRestore
 //
 //  Created by Vasja Batryn on 18.09.2024.
@@ -11,8 +11,6 @@ import SwiftUI
 final class SettingsViewModel: ObservableObject {
     // MARK: - Public Properties
 
-    let settingsItems: [SettingsItem] = SettingsItem.allCases
-
     @Published var photosPickerItem: PhotosPickerItem? {
         didSet {
             isPhotoLibraryPresented = false
@@ -23,6 +21,10 @@ final class SettingsViewModel: ObservableObject {
     @Published var selectedImage: UIImage?
     @Published var isPhotoLibraryPresented = false
     @Published var isEditMode = false
+
+    let settingsItems: [SettingsItem] = SettingsItem.allCases
+
+    // MARK: - Private Properties
 
     private let userKey = "userAvatar"
 
@@ -39,13 +41,22 @@ final class SettingsViewModel: ObservableObject {
         }
     }
 
-    // MARK: - Public Methods
-
     func termOfUse() {}
 
     func privacyPolicy() {}
 
     func support() {}
+
+    func loadAvatarFromUserDefaults() -> UIImage? {
+        if let imageData = UserDefaults.standard.data(forKey: userKey),
+           let image = UIImage(data: imageData)
+        {
+            return image
+        }
+        return nil
+    }
+
+    // MARK: - Private Methods
 
     private func fetchImage() {
         Task {
@@ -64,14 +75,5 @@ final class SettingsViewModel: ObservableObject {
         if let imageData = image.pngData() {
             UserDefaults.standard.set(imageData, forKey: userKey)
         }
-    }
-
-    func loadAvatarFromUserDefaults() -> UIImage? {
-        if let imageData = UserDefaults.standard.data(forKey: userKey),
-           let image = UIImage(data: imageData)
-        {
-            return image
-        }
-        return nil
     }
 }

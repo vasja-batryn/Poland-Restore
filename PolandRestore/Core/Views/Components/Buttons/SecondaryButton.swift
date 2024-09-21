@@ -27,7 +27,7 @@ struct SecondaryButton: View {
             }
             .frame(maxWidth: .infinity, alignment: .trailing)
             .accentColor(.secondaryForeground)
-            .padding(.vertical, 15)
+            .padding(.vertical, 13)
             .padding(.horizontal, 10)
             .overlay(
                 RoundedRectangle(cornerRadius: 12)

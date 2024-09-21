@@ -9,6 +9,8 @@ import Foundation
 
 @MainActor
 final class MainTabViewModel: ObservableObject {
-    let tabs = Tab.allCases
+    // MARK: - Public Propertis
+
     @Published var selectedTab = 0
+    let tabs = Tab.allCases
 }

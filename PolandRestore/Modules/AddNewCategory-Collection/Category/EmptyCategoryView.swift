@@ -8,10 +8,17 @@
 import SwiftUI
 
 struct EmptyCategoryView: View {
-    @State private var showAddNewCollectionPage: Bool = false
-    @StateObject private var viewModel = AddCategoryViewModel()
+    // MARK: - Public Propertis
+
     var category: CategoryEntity?
+
+    // MARK: - Private Properties
+
+    @StateObject private var viewModel = AddCategoryViewModel()
+    @State private var showAddNewCollectionPage: Bool = false
     
+    // MARK: - Body
+
     var body: some View {
         NavigationStack {
             VStack(alignment: .leading) {

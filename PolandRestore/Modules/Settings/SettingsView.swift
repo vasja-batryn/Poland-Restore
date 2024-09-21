@@ -8,78 +8,95 @@
 import SwiftUI
 
 struct SettingsView: View {
+    // MARK: - Public Propertis
+
     @StateObject var viewModel = SettingsViewModel()
+
+    // MARK: - Private Properties
+
     @State private var userName: String = ""
     @State private var collectionCount: Int = 0
     @State private var avatar: UIImage? = UIImage(named: "User")
 
+    // MARK: - Body
+
     var body: some View {
         VStack(spacing: 50) {
-            Text("Settings")
-                .font(.system(size: 24, weight: .semibold))
-                .foregroundStyle(.primaryForeground)
-                .frame(maxWidth: .infinity, alignment: .leading)
-
-            VStack {
-                if let avatar = avatar {
-                    Image(uiImage: avatar)
-                        .resizable()
-                        .frame(width: 140, height: 140)
-                        .clipShape(Circle())
-                        .overlay(alignment: .center) {
-                            if self.viewModel.isEditMode {
-                                Button(action: { self.viewModel.isPhotoLibraryPresented.toggle() }) {
-                                    Image("importImage")
-                                }
-                            }
-                        }
-                }
-
-                Text(self.userName)
-                    .font(.system(size: 18, weight: .medium))
-                    .foregroundStyle(.primaryForeground)
-                    .overlay(alignment: .trailing) {
-                        Button(action: {
-                            self.viewModel.isEditMode.toggle()
-                        }) {
-                            Image(self.viewModel.isEditMode ? "pencilActive" : "pencil")
-                                .offset(x: 20, y: -10)
-                        }
-                    }
-            }
-
+            headerView
+            userInfoSection
             SettingsListView()
                 .padding(.vertical)
-
             Spacer()
         }
         .padding(.horizontal)
-        .onAppear {
-            self.loadUserData()
-        }
+        .onAppear(perform: loadUserData)
         .photosPicker(
-            isPresented: self.$viewModel.isPhotoLibraryPresented,
-            selection: self.$viewModel.photosPickerItem
+            isPresented: $viewModel.isPhotoLibraryPresented,
+            selection: $viewModel.photosPickerItem
         )
-        .onChange(of: self.viewModel.selectedImage) { newImage in
-            if let newImage = newImage {
-                self.avatar = newImage
+        .onChange(of: viewModel.selectedImage, perform: handleImageChange)
+    }
+
+    // MARK: - Private Properties
+
+    private var headerView: some View {
+        Text("Settings")
+            .font(.system(size: 24, weight: .semibold))
+            .foregroundStyle(.primaryForeground)
+            .frame(maxWidth: .infinity, alignment: .leading)
+    }
+
+    private var userInfoSection: some View {
+        VStack {
+            if let avatar = avatar {
+                Image(uiImage: avatar)
+                    .resizable()
+                    .scaledToFill()
+                    .frame(width: 140, height: 140)
+                    .clipShape(Circle())
+                    .overlay(editAvatarButton)
+            }
+
+            Text(userName)
+                .font(.system(size: 18, weight: .medium))
+                .foregroundStyle(.primaryForeground)
+                .overlay(editNameButton)
+        }
+    }
+
+    private var editAvatarButton: some View {
+        Group {
+            if viewModel.isEditMode {
+                Button(action: { viewModel.isPhotoLibraryPresented.toggle() }) {
+                    Image("importImage")
+                }
             }
         }
     }
 
+    private var editNameButton: some View {
+        Button(action: { viewModel.isEditMode.toggle() }) {
+            Image(viewModel.isEditMode ? "pencilActive" : "pencil")
+        }
+        .offset(x: 35, y: -10)
+    }
+
+    // MARK: - Private Methods
+
     private func loadUserData() {
         if let user = UserManager.shared.loadUser() {
-            self.userName = user.name
-            self.collectionCount = user.collectionCount
-            if let avatar = viewModel.loadAvatarFromUserDefaults() {
-                self.avatar = avatar
-            } else {
-                self.avatar = UIImage(named: "User")
-            }
+            userName = user.name
+            collectionCount = user.collectionCount
+            avatar = viewModel.loadAvatarFromUserDefaults() ?? UIImage(named: "User")
         } else {
-            self.userName = "Unknown"
-            self.collectionCount = 0
+            userName = "Unknown"
+            collectionCount = 0
+        }
+    }
+
+    private func handleImageChange(newImage: UIImage?) {
+        if let newImage = newImage {
+            avatar = newImage
         }
     }
 }

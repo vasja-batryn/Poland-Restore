@@ -8,6 +8,8 @@
 import SwiftUI
 
 struct Category: Identifiable {
+    // MARK: - Public Propertis
+
     var id: UUID = .init()
     var name: String
     var image: UIImage?
@@ -16,6 +18,8 @@ struct Category: Identifiable {
 }
 
 struct Collection: Identifiable {
+    // MARK: - Public Propertis
+
     var id: UUID = .init()
     var name: String
     var image: UIImage?

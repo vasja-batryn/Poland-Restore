@@ -8,19 +8,25 @@
 import Foundation
 
 final class OtherViewModel: ObservableObject {
-    static let shared = OtherViewModel()
+    // MARK: - Public Propertis
 
-    let otherTypes = OtherType.allCases
-    let cards = NewsType.allCases
-    let achievements = AchievementType.allCases
+    static let shared = OtherViewModel()
 
     @Published var progressValues: [AchievementType: CGFloat] = [:]
     @Published var selectedPickerTab: OtherType = .news
     @Published var selectedNews: NewsType = .rybolovles
     @Published var presentNews: Bool = false
-
     @Published var completedAchievement: AchievementType? = nil
+
+    let otherTypes = OtherType.allCases
+    let cards = NewsType.allCases
+    let achievements = AchievementType.allCases
+
+    // MARK: - Private Properties
+
     private var shownAchievements: Set<AchievementType> = []
+
+    // MARK: - Public Methods
 
     func updateAchievementProgress(collectionCount: Int) {
         for achievement in achievements {

@@ -10,41 +10,32 @@ import PhotosUI
 import SwiftUI
 
 final class AddNewCollectionViewModel: ObservableObject {
-    @Published var photosPickerItem: PhotosPickerItem? {
-        didSet {
-            isPhotoLibraryPresented = false
-            fetchImage()
-        }
-    }
-    
+    // MARK: - Public Propertis
+
+    @Published var selectedCollectionCategory: CategoryEntity?
+    @Published var selectedCollectionType: CategoryType? = nil
     @Published var selectedCollectionImage: UIImage?
     @Published var isPhotoLibraryPresented = false
     @Published var isDeletePopupPresent = false
     @Published var collectionName: String = ""
     @Published var collectionCost: String = ""
     @Published var collectionDate: String = ""
-    @Published var selectedCollectionType: CategoryType? = nil
-    @Published var selectedCollectionCategory: CategoryEntity?
     @Published var selectedCollection: CollectionEntity?
-    
-    private let viewContext = PersistenceController.shared.container.viewContext
-    
-    // MARK: - Private Methods
-    
-    private func fetchImage() {
-        Task {
-            if let data = try? await photosPickerItem?.loadTransferable(type: Data.self),
-               let uiImage = UIImage(data: data)
-            {
-                DispatchQueue.main.async {
-                    self.selectedCollectionImage = uiImage
-                }
-            }
+    @Published var photosPickerItem: PhotosPickerItem? {
+        didSet {
+            isPhotoLibraryPresented = false
+            fetchImage()
         }
     }
+
+    // MARK: - Private Properties
+
+    private let viewContext = PersistenceController.shared.container.viewContext
     
+    // MARK: - Public Methods
+
     func addCollection() {
-        guard let selectedCategory = selectedCollectionCategory else {
+        guard selectedCollectionCategory != nil else {
             print("Category not selected")
             return
         }
@@ -78,6 +69,20 @@ final class AddNewCollectionViewModel: ObservableObject {
                 
             } catch {
                 print("Error deleting collection: \(error)")
+            }
+        }
+    }
+    
+    // MARK: - Private Methods
+    
+    private func fetchImage() {
+        Task {
+            if let data = try? await photosPickerItem?.loadTransferable(type: Data.self),
+               let uiImage = UIImage(data: data)
+            {
+                DispatchQueue.main.async {
+                    self.selectedCollectionImage = uiImage
+                }
             }
         }
     }

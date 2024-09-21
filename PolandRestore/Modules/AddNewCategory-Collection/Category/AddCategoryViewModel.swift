@@ -10,6 +10,16 @@ import PhotosUI
 import SwiftUI
 
 final class AddCategoryViewModel: ObservableObject {
+    // MARK: - Public Propertis
+    
+    @Published var selectedImage: UIImage?
+    @Published var selectedCategoryType: CategoryType? = nil
+    @Published var categories: [CategoryEntity] = []
+    @Published var selectedCategory: CategoryEntity?
+    @Published var isPhotoLibraryPresented = false
+    @Published var isDeletePopupPresent = false
+    @Published var isFinishPresented = false
+    @Published var categoryName: String = ""
     @Published var photosPickerItem: PhotosPickerItem? {
         didSet {
             isPhotoLibraryPresented = false
@@ -17,31 +27,12 @@ final class AddCategoryViewModel: ObservableObject {
         }
     }
     
-    @Published var selectedImage: UIImage?
-    @Published var isPhotoLibraryPresented = false
-    @Published var isDeletePopupPresent = false
-    @Published var categoryName: String = ""
-    @Published var selectedCategoryType: CategoryType? = nil
-    @Published var categories: [CategoryEntity] = []
-    @Published var isFinishPresented = false
-    @Published var selectedCategory: CategoryEntity?
-    
+    // MARK: - Private Properties
+
     private let viewContext = PersistenceController.shared.container.viewContext
     
-    // MARK: - Private Methods
-    
-    private func fetchImage() {
-        Task {
-            if let data = try? await photosPickerItem?.loadTransferable(type: Data.self),
-               let uiImage = UIImage(data: data)
-            {
-                DispatchQueue.main.async {
-                    self.selectedImage = uiImage
-                }
-            }
-        }
-    }
-    
+    // MARK: - Public Methods
+
     func saveCollection() {
         let newCategory = CategoryEntity(context: viewContext)
         newCategory.id = UUID()
@@ -78,6 +69,20 @@ final class AddCategoryViewModel: ObservableObject {
             }
         } else {
             print("No category selected to delete.")
+        }
+    }
+    
+    // MARK: - Private Methods
+    
+    private func fetchImage() {
+        Task {
+            if let data = try? await photosPickerItem?.loadTransferable(type: Data.self),
+               let uiImage = UIImage(data: data)
+            {
+                DispatchQueue.main.async {
+                    self.selectedImage = uiImage
+                }
+            }
         }
     }
 

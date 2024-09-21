@@ -11,48 +11,54 @@ struct CategoryDropdown: View {
     // MARK: - Public Properties
 
     @Binding var selectedCategoryType: CategoryType?
+    
+    // MARK: - Private Properties
     private let types = CategoryType.allCases
-    @State var isDrop: Bool = false
+    @State private var isDrop: Bool = false
 
+    // MARK: - Body
     var body: some View {
         VStack(alignment: .leading, spacing: 8) {
-            HStack(spacing: 12) {
-                Text("Category type")
-                    .font(.system(size: 18, weight: .regular))
-                    .foregroundStyle(Color.secondaryForeground.opacity(0.25))
-            }
-            .padding(.leading, 5)
+            Text("Category type")
+                .font(.system(size: 18, weight: .regular))
+                .foregroundStyle(Color.secondaryForeground.opacity(0.25))
+                .padding(.leading, 5)
 
             HStack {
                 Text(selectedCategoryType?.rawValue ?? "")
                     .font(.system(size: 18, weight: .medium))
                     .frame(maxWidth: .infinity, alignment: .center)
+                    .frame(height: 20)
+                    .padding(.vertical, 4)
                     .overlay(alignment: .trailing) {
                         Button(action: { isDrop.toggle() }) {
-                            Image(systemName: isDrop ? "chevron.up" : "chevron.down")
+                            Image(systemName: isDrop ? "chevron.up" : "chevron.down"
+                            )
+                            .font(.system(size: 25, weight: .medium))
                         }
-                        
                     }
-                    .padding(.vertical, 4)
             }
-            .frame(maxWidth: .infinity, alignment: .trailing)
-            .accentColor(.primaryForeground)
             .padding(.vertical, 13)
             .padding(.horizontal, 10)
+            .frame(maxWidth: .infinity, alignment: .trailing)
             .overlay(
                 RoundedRectangle(cornerRadius: 12)
                     .stroke(Color.primaryForeground, lineWidth: 2)
             )
-            .font(.system(size: 18, weight: .semibold))
+            .accentColor(.primaryForeground)
 
             if isDrop {
-                ForEach(types) { type in
-                    SecondaryButton(
-                        type: type,
-                        isSelect: selectedCategoryType == type,
-                        onTap: { selectedCategoryType = type }
-                    )
+                VStack(spacing: 15) {
+                    ForEach(types, id: \.self) { type in
+                        SecondaryButton(
+                            type: type,
+                            isSelect: selectedCategoryType == type,
+                            onTap: { selectedCategoryType = type }
+                        )
+                    }
                 }
+                .transition(.opacity)
+                .padding(.vertical, 10)
             }
         }
         .animation(.spring(duration: 0.6), value: isDrop)
@@ -62,4 +68,8 @@ struct CategoryDropdown: View {
 
 #Preview {
     CategoryDropdown(selectedCategoryType: .constant(.none))
+    
+    CategoryDropdown(selectedCategoryType: .constant(.old))
 }
+
+
