@@ -30,11 +30,11 @@ enum Tab: Int {
     var iconName: String {
         switch self {
         case .news:
-            return "news"
+            return "News"
         case .home:
-            return "home"
+            return "Home"
         case .settings:
-            return "settings"
+            return "Settings"
         }
     }
 }

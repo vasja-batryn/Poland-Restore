@@ -88,8 +88,9 @@ struct AddNewCollection: View {
                 .frame(width: 180, height: 200)
                 .background(
                     RoundedRectangle(cornerRadius: 24)
-                        .foregroundStyle(.primaryForeground.opacity(0.2)))
-                .overlay(imageOverlay)
+                        .foregroundStyle(.tertiaryForeground.opacity(0.5))
+                        .overlay(imageOverlay)
+                )
         }
     }
     
@@ -102,9 +103,9 @@ struct AddNewCollection: View {
                     .frame(width: 180, height: 200)
                     .clipShape(RoundedRectangle(cornerRadius: 24))
                     .clipped()
-                    .overlay(Image("importImage"))
+                    .overlay(Image.importImage)
             } else {
-                Image("importImage")
+                Image.importImage
             }
         }
         .background(

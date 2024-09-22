@@ -10,9 +10,9 @@ import SwiftUI
 enum SettingsItem: String, CaseIterable {
     // MARK: - Cases
 
-    case termOfUse
-    case privacyPolicy
-    case support
+    case termOfUse = "TermOfUse"
+    case privacyPolicy = "PrivacyPolicy"
+    case support = "Support"
 
     // MARK: - Public Properties
 

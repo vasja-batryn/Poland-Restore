@@ -118,7 +118,7 @@ struct CollectionView: View {
     
     private var deleteButton: some View {
         Button(action: { viewModel.isDeletePopupPresent.toggle() }) {
-            Image("broom")
+            Image.broom
                 .resizable()
                 .frame(width: 80, height: 80)
                 .foregroundStyle(.primaryText)

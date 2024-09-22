@@ -34,7 +34,7 @@ struct EmptyCategoryView: View {
                     .foregroundStyle(.secondaryForeground.opacity(0.5))
                     .padding(.top, 1)
                 
-                Image("emptyCategory")
+                Image.emptyCategory
                     .resizable()
                     .scaledToFit()
                 

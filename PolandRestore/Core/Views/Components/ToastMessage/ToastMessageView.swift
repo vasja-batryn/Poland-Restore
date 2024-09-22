@@ -36,7 +36,7 @@ struct ToastMessageView: View {
 
                 Spacer()
 
-                Image("complate")
+                Image.complate
                     .resizable()
                     .scaledToFill()
                     .frame(width: 100, height: 60)
@@ -67,7 +67,7 @@ struct ToastMessageView: View {
     private var fireImagesStack: some View {
         VStack(spacing: 9) {
             ForEach(0 ..< 3) { index in
-                Image("fire")
+                Image.fire
                     .resizable()
                     .scaledToFit()
                     .opacity(0.7 - Double(index) / 10)

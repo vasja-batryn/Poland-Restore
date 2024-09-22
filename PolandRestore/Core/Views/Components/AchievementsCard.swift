@@ -16,7 +16,7 @@ struct AchievementsCard: View {
 
     // MARK: - Private Properties
 
-    private let imageNames = ["fire", "fire", "fire"]
+    private let imageNames = ["Fire", "Fire", "Fire"]
 
     // MARK: - Body
 
@@ -49,12 +49,13 @@ struct AchievementsCard: View {
             RoundedRectangle(cornerRadius: 12)
                 .foregroundColor(progress == 1 ? Color.primaryForeground : .tertiaryForeground.opacity(0.5))
 
-            VStack(spacing: 6) {
+            VStack(spacing: 5) {
                 ForEach(imageNames.indices, id: \.self) { index in
                     Image(imageNames[index])
                         .resizable()
-                        .scaledToFit()
+                        .scaledToFill()
                         .opacity(fireOpacity(for: index))
+                        
                 }
             }
             .padding(6)

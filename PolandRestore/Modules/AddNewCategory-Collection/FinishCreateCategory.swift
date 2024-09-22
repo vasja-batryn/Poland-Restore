@@ -16,7 +16,7 @@ struct FinishCreateCategory: View {
                 .font(.system(size: 32, weight: .semibold))
                 .frame(maxWidth: .infinity, alignment: .leading)
 
-            Image("fingerUp")
+            Image.fingerUp
                 .resizable()
                 .scaledToFill()
                 .frame(maxWidth: 256, maxHeight: 256)

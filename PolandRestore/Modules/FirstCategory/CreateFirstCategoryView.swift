@@ -20,7 +20,7 @@ struct CreateFirstCategoryView: View {
                 Text("Let's create our first \ncategory?")
                     .font(.system(size: 32, weight: .semibold))
                 
-                Image("AnyCategories")
+                Image.anyCategories
                     .resizable()
                     .scaledToFit()
                 

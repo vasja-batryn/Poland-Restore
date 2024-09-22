@@ -19,6 +19,28 @@ enum OnboardingPage: Int, CaseIterable {
     var image: String {
         "Onboarding-\(rawValue)"
     }
+    
+    var title: String {
+        switch self {
+        case .collections:
+            return "Collections right in \nyour phone!"
+        case .achievements:
+            return "Get achievements for \nyour collections"
+        case .news:
+            return "Stay tuned for more \nnews"
+        }
+    }
+    
+    var description: String {
+        switch self {
+        case .collections:
+            return "Create your first personal \ncollection, from a wide \nvariety of items"
+        case .achievements:
+            return "Complete tasks, get \npersonal achievements \nfor them"
+        case .news:
+            return "Watch the news for your \ninterests, learn a lot of \nnew things!"
+        }
+    }
 }
 
 // MARK: - Identifiable

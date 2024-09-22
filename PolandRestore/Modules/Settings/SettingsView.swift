@@ -68,7 +68,7 @@ struct SettingsView: View {
         Group {
             if viewModel.isEditMode {
                 Button(action: { viewModel.isPhotoLibraryPresented.toggle() }) {
-                    Image("importImage")
+                    Image.importImage
                 }
             }
         }
@@ -76,7 +76,7 @@ struct SettingsView: View {
 
     private var editNameButton: some View {
         Button(action: { viewModel.isEditMode.toggle() }) {
-            Image(viewModel.isEditMode ? "pencilActive" : "pencil")
+            viewModel.isEditMode ? Image.pencilActive : .pencil
         }
         .offset(x: 35, y: -10)
     }

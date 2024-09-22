@@ -32,13 +32,14 @@ struct OnboardingView: View {
     private var pageCarousel: some View {
         GeometryReader { geometry in
             ZStack {
-                ForEach(viewModel.pages.indices, id: \.self) { index in
-                    let page = viewModel.pages[index]
-                    Image(page.image)
-                        .resizable()
-                        .scaledToFit()
-                        .offset(x: -geometry.size.width * CGFloat(viewModel.currentPageIndex - index))
-                        .opacity(viewModel.currentPageIndex == index ? 1 : 0)
+                ForEach(viewModel.pages) { page in
+                    OnboardingPageView(
+                        imageName: page.image,
+                        title: page.title,
+                        description: page.description
+                    )
+                    .offset(x: -geometry.size.width * CGFloat(viewModel.currentPageIndex - (viewModel.pages.firstIndex(of: page) ?? 0)))
+               
                 }
             }
             .animation(.spring(), value: viewModel.currentPageIndex)
