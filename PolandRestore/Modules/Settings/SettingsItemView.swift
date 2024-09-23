@@ -11,11 +11,14 @@ struct SettingsItemView: View {
     // MARK: - Public Properties
 
     let item: SettingsItem
+    @StateObject var viewModel = SettingsViewModel()
 
     // MARK: - Body
 
     var body: some View {
-        Button(action: {}) {
+        Button(action: {
+            viewModel.onSelectItem(item)
+        }) {
             HStack {
                 Image(item.image)
                     .padding(1)

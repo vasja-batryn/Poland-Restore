@@ -8,13 +8,18 @@
 import CoreData
 
 struct PersistenceController {
-    
     // MARK: - Public Propertis
+
     static let shared = PersistenceController()
 
     let container: NSPersistentContainer
 
+    var context: NSManagedObjectContext {
+        container.viewContext
+    }
+
     // MARK: - Initializers
+
     init() {
         container = NSPersistentContainer(name: "Model")
         container.loadPersistentStores { _, error in
@@ -25,6 +30,7 @@ struct PersistenceController {
     }
 
     // MARK: - Public Methods
+
     func save() {
         let context = container.viewContext
         if context.hasChanges {

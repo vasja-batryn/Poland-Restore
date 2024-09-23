@@ -11,6 +11,7 @@ struct OnboardingView: View {
     // MARK: - Private Properties
 
     @StateObject private var viewModel = OnboardingViewModel()
+    @Environment(\.openURL) var openURL
 
     // MARK: - Body
 
@@ -39,7 +40,6 @@ struct OnboardingView: View {
                         description: page.description
                     )
                     .offset(x: -geometry.size.width * CGFloat(viewModel.currentPageIndex - (viewModel.pages.firstIndex(of: page) ?? 0)))
-               
                 }
             }
             .animation(.spring(), value: viewModel.currentPageIndex)
@@ -63,7 +63,9 @@ struct OnboardingView: View {
 
     private var termsAndPrivacyLinks: some View {
         HStack {
-            Button(action: {}) {
+            Button(action: {
+                openURL(URL(string: "https://www.termsfeed.com/live/afcf5553-3121-4d8f-a3b5-a97af53d9db0")!)
+            }) {
                 Text("Terms of use")
                     .font(.system(size: 12, weight: .medium))
             }
@@ -71,7 +73,9 @@ struct OnboardingView: View {
             Text("|")
                 .font(.system(size: 12, weight: .medium))
 
-            Button(action: {}) {
+            Button(action: {
+                openURL(URL(string: "https://www.termsfeed.com/live/afcf5553-3121-4d8f-a3b5-a97af53d9db0")!)
+            }) {
                 Text("Privacy Policy")
                     .font(.system(size: 12, weight: .medium))
             }

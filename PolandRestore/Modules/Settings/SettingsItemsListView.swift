@@ -43,8 +43,8 @@ struct SettingsListView: View {
                     .foregroundStyle(.primaryForeground)
                     .padding(.horizontal)
 
-                Button(action: {}) {
-                    Text("Resrt data")
+                Button(action: { viewModel.resetAllData() }) {
+                    Text("Reset data")
                         .foregroundStyle(.secondaryForeground)
                         .padding()
                         .font(.system(size: 16, weight: .semibold))
